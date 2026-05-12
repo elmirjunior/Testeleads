@@ -1,0 +1,11 @@
+{
+  "name": "property-price-investment-calculator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A dependency-free browser app for property price, rent, sale, and financing analysis.",
+  "scripts": {
+    "start": "python3 -m http.server 5173",
+    "check": "node --check src/main.js",
+    "build": "npm run check"
+  }
+}
