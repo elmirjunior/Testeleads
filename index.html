@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Property Price & Investment Analyzer</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Real estate deal checker</p>
+          <h1>Estimate property value, rent, sale returns, and financing in one place.</h1>
+          <p class="hero-copy">
+            Enter an address and your assumptions to compare a market-price purchase,
+            rental strategy, resale strategy, and loan payment scenarios.
+          </p>
+        </div>
+        <div class="hero-card">
+          <span>Estimated market value</span>
+          <strong id="heroMarketValue">$0</strong>
+          <small>Based on your price, comps, and confidence settings.</small>
+        </div>
+      </section>
+
+      <section class="grid">
+        <form id="calculatorForm" class="panel input-panel">
+          <h2>Property details</h2>
+          <label>
+            Property address
+            <input id="address" name="address" type="text" placeholder="123 Main St, Miami, FL" />
+          </label>
+          <label>
+            Property type
+            <select id="propertyType" name="propertyType">
+              <option>Single family</option>
+              <option>Condo</option>
+              <option>Townhouse</option>
+              <option>Duplex / Multifamily</option>
+              <option>Commercial</option>
+            </select>
+          </label>
+          <div class="two-column">
+            <label>
+              Asking price
+              <input id="askingPrice" name="askingPrice" type="number" min="0" value="350000" />
+            </label>
+            <label>
+              Estimated market price
+              <input id="marketPrice" name="marketPrice" type="number" min="0" value="375000" />
+            </label>
+          </div>
+          <label>
+            Comparable sales average
+            <input id="compsAverage" name="compsAverage" type="number" min="0" value="365000" />
+          </label>
+          <label>
+            Market confidence
+            <input id="confidence" name="confidence" type="range" min="0" max="100" value="70" />
+            <span class="range-value"><span id="confidenceValue">70</span>% confidence in comps</span>
+          </label>
+
+          <h2>Financing</h2>
+          <div class="two-column">
+            <label>
+              Down payment
+              <input id="downPayment" name="downPayment" type="number" min="0" value="70000" />
+            </label>
+            <label>
+              Interest rate (%)
+              <input id="interestRate" name="interestRate" type="number" min="0" step="0.01" value="6.75" />
+            </label>
+          </div>
+          <div class="two-column">
+            <label>
+              Loan term (years)
+              <input id="loanYears" name="loanYears" type="number" min="1" value="30" />
+            </label>
+            <label>
+              Closing + repair costs
+              <input id="extraCosts" name="extraCosts" type="number" min="0" value="18000" />
+            </label>
+          </div>
+
+          <h2>Rent or sale options</h2>
+          <div class="two-column">
+            <label>
+              Expected monthly rent
+              <input id="monthlyRent" name="monthlyRent" type="number" min="0" value="2800" />
+            </label>
+            <label>
+              Monthly expenses
+              <input id="monthlyExpenses" name="monthlyExpenses" type="number" min="0" value="850" />
+            </label>
+          </div>
+          <div class="two-column">
+            <label>
+              Future sale price
+              <input id="salePrice" name="salePrice" type="number" min="0" value="420000" />
+            </label>
+            <label>
+              Selling costs (%)
+              <input id="sellingCosts" name="sellingCosts" type="number" min="0" step="0.1" value="6" />
+            </label>
+          </div>
+          <button type="submit" class="lookup-button">Check address estimate</button>
+        </form>
+
+        <section class="panel results-panel" aria-live="polite">
+          <div class="results-header">
+            <div>
+              <p class="eyebrow">Analysis</p>
+              <h2 id="resultAddress">No address entered</h2>
+            </div>
+            <span id="dealBadge" class="badge">Review</span>
+          </div>
+
+          <div class="metric-grid">
+            <article class="metric-card">
+              <span>Value estimate</span>
+              <strong id="blendedValue">$0</strong>
+              <small id="equityPosition">Equity position: $0</small>
+            </article>
+            <article class="metric-card">
+              <span>Monthly loan payment</span>
+              <strong id="loanPayment">$0</strong>
+              <small id="loanAmount">Loan amount: $0</small>
+            </article>
+            <article class="metric-card">
+              <span>Rental cash flow</span>
+              <strong id="cashFlow">$0</strong>
+              <small id="capRate">Cap rate: 0%</small>
+            </article>
+            <article class="metric-card">
+              <span>Sale profit estimate</span>
+              <strong id="saleProfit">$0</strong>
+              <small id="saleRoi">ROI: 0%</small>
+            </article>
+          </div>
+
+          <div class="recommendation">
+            <h3>Recommended option</h3>
+            <p id="recommendationText">Add property numbers to see whether renting or selling looks stronger.</p>
+          </div>
+
+          <div class="scenario-table">
+            <div class="table-row table-head">
+              <span>Scenario</span>
+              <span>Key result</span>
+              <span>Status</span>
+            </div>
+            <div class="table-row">
+              <span>Buy at asking</span>
+              <span id="discountResult">$0</span>
+              <span id="discountStatus">Neutral</span>
+            </div>
+            <div class="table-row">
+              <span>Rent strategy</span>
+              <span id="rentResult">$0 / mo</span>
+              <span id="rentStatus">Neutral</span>
+            </div>
+            <div class="table-row">
+              <span>Sale strategy</span>
+              <span id="saleResult">$0</span>
+              <span id="saleStatus">Neutral</span>
+            </div>
+          </div>
+
+          <aside class="api-note">
+            <h3>Address price lookup integration</h3>
+            <p>
+              This app is ready for a property-data API. Connect providers such as ATTOM,
+              RentCast, Zillow Bridge Interactive, or county assessor data in
+              <code>src/main.js</code> where <code>lookupAddressPrice</code> is defined.
+            </p>
+          </aside>
+        </section>
+      </section>
+    </main>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
